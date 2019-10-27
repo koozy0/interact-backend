@@ -1,5 +1,17 @@
 const Event = require('../models/Event');
 
+const search = async (req, res, next) => {
+  const { q } = req.query;
+  const regex = new RegExp(q, 'i');
+
+  try {
+    const events = await Event.find({ code: regex });
+    res.json(events);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const getAll = async (req, res, next) => {
   try {
     const events = await Event.find();
@@ -37,6 +49,7 @@ const updateOne = async (req, res, next) => {};
 const deleteOne = async (req, res, next) => {};
 
 module.exports = {
+  search,
   getAll,
   getOne,
   createOne,

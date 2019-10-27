@@ -26,7 +26,7 @@ mongoose
   .catch(err => logger.error('Error connecting to MongoDB', err));
 
 // Use routes
-app.use(routes);
+app.use('/api', routes);
 
 // Use error handler
 app.use(errorHandler);

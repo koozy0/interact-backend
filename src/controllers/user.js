@@ -1,10 +1,16 @@
 const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 const getOne = async (req, res, next) => {
   const { username } = req.params;
 
   try {
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username }).select([
+      '-_id',
+      '-password',
+      '-secret',
+    ]);
 
     if (user) {
       res.json(user);
@@ -26,23 +32,32 @@ const createOne = async (req, res, next) => {
     return res.status(400).json({ msg: 'User already exists' });
   }
 
-  // Create new User
-  const newUser = new User({
-    username,
-    password,
-    name,
-    email,
-    role,
-  });
-
   try {
+    // Create new User
+    const newUser = new User({
+      username,
+      password,
+      name,
+      email,
+      role,
+    });
     const user = await newUser.save();
+
+    // Create JWT
+    const token = jwt.sign(
+      { id: user.id, username: user.username },
+      config.authentication.jwtSecret,
+    );
+
     res.status(201).json({
-      id: user.id,
-      username: user.username,
-      name: user.name,
-      email: user.email,
-      secret: user.secret,
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        secret: user.secret,
+      },
     });
   } catch (err) {
     next(err);

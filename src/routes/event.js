@@ -8,6 +8,8 @@ eventRouter
   .get(controllers.getAll)
   .post(controllers.createOne);
 
+eventRouter.route('/search').get(controllers.search);
+
 eventRouter
   .route('/:id')
   .get(controllers.getOne)
