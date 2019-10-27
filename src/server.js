@@ -1,28 +1,43 @@
+const config = require('./config');
 const express = require('express');
-const http = require('http');
-const socketIo = require('socket.io');
+const middlewares = require('./middlewares');
+const mongoose = require('mongoose');
 const routes = require('./routes');
-
-const port = process.env.PORT || 5000;
+const errorHandler = require('./middlewares/error-handler');
+const logger = require('./utils/logger');
+const sockets = require('./sockets');
 
 const app = express();
 
+// Use middlewares
+app.use(...middlewares);
+
+// DB Config
+const mongoURI = config.db.mongoURI;
+
+// Connect to MongoDB
+mongoose
+  .connect(mongoURI, {
+    useCreateIndex: true,
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => logger.info('Connected to MongoDB', { label: 'database' }))
+  .catch(err => logger.error('Error connecting to MongoDB', err));
+
+// Use routes
 app.use(routes);
 
-const server = http.createServer(app);
+// Use error handler
+app.use(errorHandler);
 
-const io = socketIo(server);
+// Create HTTP server
+const server = require('http').createServer(app);
 
-io.on('connection', socket => {
-  console.log('Client connected:', socket.id);
+// Initialise socket.io
+const io = sockets.init(server);
+app.set('io', io);
 
-  socket.emit('message', `client ${socket.id} has connected`);
+const port = process.env.PORT || 5000;
 
-  socket.on('client-message', message =>
-    socket.broadcast.emit('message', { clientId: socket.id, message }),
-  );
-
-  socket.on('disconnect', () => console.log('Client disconnected:', socket.id));
-});
-
-server.listen(port, () => console.log(`Server listening on port ${port}`));
+server.listen(port, () => logger.info(`Listening on port ${port}`));
