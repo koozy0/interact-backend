@@ -18,4 +18,16 @@ const authenticate = (req, res, next) => {
   }
 };
 
-module.exports = authenticate;
+const isAdmin = (req, res, next) => {
+  const user = req.user;
+
+  if (user.role.includes('administrator')) {
+    next();
+  } else {
+    res.status(403).json({
+      msg: 'Administrator rights are required to perform this action',
+    });
+  }
+};
+
+module.exports = { authenticate, isAdmin };

@@ -1,15 +1,12 @@
 const express = require('express');
 const controllers = require('../controllers/question');
 
-const questionRouter = express.Router();
+const questionRouter = express.Router({ mergeParams: true });
+
+questionRouter.route('/').post(controllers.createOne);
 
 questionRouter
-  .route('/')
-  .get(controllers.getAll)
-  .post(controllers.createOne);
-
-questionRouter
-  .route('/:id')
+  .route('/:questionId')
   .put(controllers.updateOne)
   .delete(controllers.deleteOne);
 

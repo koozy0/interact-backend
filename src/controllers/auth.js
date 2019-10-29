@@ -14,7 +14,7 @@ const authUser = async (req, res, next) => {
     }
 
     // Validate password
-    const isValidPassword = user.isValidPassword(password);
+    const isValidPassword = await user.isValidPassword(password);
 
     if (!isValidPassword) {
       return res.status(401).json({ msg: 'Invalid credentials' });
@@ -33,6 +33,7 @@ const authUser = async (req, res, next) => {
         username: user.username,
         name: user.name,
         email: user.email,
+        role: user.role,
       },
     });
   } catch (err) {

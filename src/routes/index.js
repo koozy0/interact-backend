@@ -14,7 +14,6 @@ router
 router.use('/auth', authRouter);
 router.use('/users', userRouter);
 router.use('/events', eventRouter);
-router.use('/questions', questionRouter);
 
 router.route('*').get((req, res) => res.sendStatus(404));
 

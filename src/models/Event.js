@@ -1,15 +1,18 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const Question = require('./Question');
 
 const EventSchema = new Schema(
   {
     createdBy: {
       type: Schema.Types.ObjectId,
-      ref: 'Admin',
+      ref: 'User',
     },
 
     name: {
       type: String,
+      minlength: 5,
+      maxlength: 50,
       required: true,
     },
 
@@ -26,27 +29,19 @@ const EventSchema = new Schema(
     code: {
       type: String,
       match: /^[\w\d]+$/,
+      minlength: 5,
+      maxlength: 20,
       unique: true,
       required: true,
     },
 
-    questions: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Question',
-      },
-    ],
+    questions: [Question.schema],
 
     highlights: {
-      type: [
-        {
-          type: Schema.Types.ObjectId,
-          ref: 'Question',
-        },
-      ],
+      type: [Question.schema],
     },
   },
   { timestamps: true },
 );
 
-module.exports = Event = mongoose.model('event', EventSchema);
+module.exports = Event = mongoose.model('Event', EventSchema);

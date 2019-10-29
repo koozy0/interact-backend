@@ -14,7 +14,7 @@ const search = async (req, res, next) => {
 
 const getAll = async (req, res, next) => {
   try {
-    const events = await Event.find();
+    const events = await Event.find().populate('createdBy', 'name username');
     res.json(events);
   } catch (err) {
     next(err);
@@ -22,10 +22,17 @@ const getAll = async (req, res, next) => {
 };
 
 const getOne = async (req, res, next) => {
-  const id = req.params.id;
+  const { eventCode: code } = req.params;
 
   try {
-    const event = await Event.findById(id);
+    const event = await Event.findOne({ code });
+
+    if (!event) {
+      return res
+        .status(404)
+        .json({ msg: `Event with code: "${code}" was not found` });
+    }
+
     res.json(event);
   } catch (err) {
     next(err);

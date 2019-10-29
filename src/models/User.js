@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const uuid = require('uuid/v4');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
@@ -12,7 +11,7 @@ const UserSchema = new Schema(
       lowercase: true,
       match: /^[\w\d]+$/,
       unique: true,
-      minlength: 6,
+      minlength: 4,
       maxlength: 30,
       required: true,
     },
@@ -44,8 +43,6 @@ const UserSchema = new Schema(
       enum: ['user', 'administrator'],
       default: ['user'],
     },
-
-    secret: String,
   },
   { timestamps: true },
 );
@@ -58,15 +55,15 @@ UserSchema.pre('save', async function(next) {
   try {
     const hashedPassword = await bcrypt.hash(this.password, 10);
     this.password = hashedPassword;
-    this.secret = uuid();
     return next();
   } catch (err) {
     next(err);
   }
 });
 
-UserSchema.methods.isValidPassword = function(password) {
-  return bcrypt.compare(password, this.password);
+UserSchema.methods.isValidPassword = async function(password) {
+  const isValidPassword = await bcrypt.compare(password, this.password);
+  return isValidPassword;
 };
 
 UserSchema.methods.isAdmin = function() {
@@ -80,4 +77,4 @@ UserSchema.methods.getAuthToken = function() {
   );
 };
 
-module.exports = User = mongoose.model('user', UserSchema);
+module.exports = User = mongoose.model('User', UserSchema);

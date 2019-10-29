@@ -3,14 +3,10 @@ const jwt = require('jsonwebtoken');
 const config = require('../config');
 
 const getOne = async (req, res, next) => {
-  const { username } = req.params;
+  const { id } = req.params;
 
   try {
-    const user = await User.findOne({ username }).select([
-      '-_id',
-      '-password',
-      '-secret',
-    ]);
+    const user = await User.findById(id).select('-password');
 
     if (user) {
       res.json(user);
@@ -45,7 +41,7 @@ const createOne = async (req, res, next) => {
 
     // Create JWT
     const token = jwt.sign(
-      { id: user.id, username: user.username },
+      { id: user.id, username: user.username, role: user.role },
       config.authentication.jwtSecret,
     );
 
@@ -56,7 +52,6 @@ const createOne = async (req, res, next) => {
         username: user.username,
         name: user.name,
         email: user.email,
-        secret: user.secret,
       },
     });
   } catch (err) {
