@@ -8,7 +8,6 @@ const authUser = async (req, res, next) => {
   try {
     // Check for existing user
     const user = await User.findOne({ username });
-    const { id, username, name, email, role, isAdmin } = user;
 
     // Return HTTP 404 error if a matching User is not found
     if (!user) {
@@ -24,12 +23,26 @@ const authUser = async (req, res, next) => {
     }
 
     // Create JWT
-    const payload = { id, username, isAdmin };
-    const token = jwt.sign(payload, config.authentication.jwtSecret);
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+        isAdmin: user.isAdmin,
+      },
+      config.auth.jwtSecret,
+    );
 
-    res
-      .status(200)
-      .json({ token, user: { id, username, name, email, role, isAdmin } });
+    res.status(200).json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isAdmin: user.isAdmin,
+      },
+    });
   } catch (err) {
     next(err);
   }

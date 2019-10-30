@@ -21,7 +21,15 @@ const getOne = async (req, res, next) => {
 };
 
 const createOne = async (req, res, next) => {
-  const { username, password, name, email, role } = req.body;
+  const { username, password, name, email, role, secret } = req.body;
+
+  if (!secret) {
+    const msg = 'Secret key is required';
+    res.status(400).json({ msg });
+  } else if (secret !== config.user.adminSecret) {
+    const msg = 'Invalid secret key';
+    res.status(400).json({ msg });
+  }
 
   // Check for existing User
   const hasUser = await User.findOne({ username });
@@ -35,15 +43,28 @@ const createOne = async (req, res, next) => {
     // Create new User
     const newUser = new User({ username, password, name, email, role });
     const user = await newUser.save();
-    const { id, username, name, email, role, isAdmin } = user;
 
     // Create JWT
-    const payload = { id, username, isAdmin };
-    const token = jwt.sign(payload, config.authentication.jwtSecret);
+    const token = jwt.sign(
+      {
+        id: user.id,
+        username: user.username,
+        isAdmin: user.isAdmin,
+      },
+      config.auth.jwtSecret,
+    );
 
-    res
-      .status(201)
-      .json({ token, user: { id, username, name, email, role, isAdmin } });
+    res.status(201).json({
+      token,
+      user: {
+        id: user.id,
+        username: user.username,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+        isAdmin: user.isAdmin,
+      },
+    });
   } catch (err) {
     next(err);
   }

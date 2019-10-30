@@ -5,8 +5,14 @@ if (loaded.error) {
   logger.error('error loading .env file');
 }
 
-const authentication = require('./authentication');
+const auth = require('./auth');
 const db = require('./db');
+const user = require('./user');
 const winston = require('./winston');
 
-module.exports = { authentication, db, winston };
+module.exports = {
+  auth,
+  db,
+  user,
+  winston,
+};

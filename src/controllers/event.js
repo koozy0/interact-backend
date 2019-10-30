@@ -18,7 +18,7 @@ const getAll = async (req, res, next) => {
     // Find Event(s) and sort by 'createdAt' in descending order
     // populate the createdBy field with name and username as well
     const events = await Event.find()
-      .sort({ field: 'createdAt', test: -1 })
+      .sort({ createdAt: -1 })
       .populate('createdBy', 'name username');
 
     res.status(200).json(events);

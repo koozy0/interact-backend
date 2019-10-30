@@ -72,12 +72,12 @@ UserSchema.methods.isValidPassword = async function(password) {
 UserSchema.methods.getAuthToken = function() {
   return jwt.sign(
     { _id: this._id, isAdmin: this.isAdmin() },
-    config.authentication.jwtSecret,
+    config.auth.jwtSecret,
   );
 };
 
 UserSchema.virtual('isAdmin').get(function() {
-  return this.roles.includes('administrator');
+  return this.role.includes('administrator');
 });
 
 module.exports = User = mongoose.model('User', UserSchema);

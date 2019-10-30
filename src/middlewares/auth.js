@@ -12,7 +12,7 @@ const authenticate = (req, res, next) => {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, config.authentication.jwtSecret);
+    const decoded = jwt.verify(token, config.auth.jwtSecret);
     req.user = decoded;
 
     next();
