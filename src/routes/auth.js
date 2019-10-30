@@ -1,10 +1,12 @@
 const express = require('express');
 const controllers = require('../controllers/auth');
-const auth = require('../middlewares/auth');
+const invalidMethod = require('../controllers/invalid-method');
 
-const authRouter = express.Router();
+const router = express.Router();
 
-authRouter.route('/').post(controllers.authUser);
-authRouter.route('/user').get(auth.authenticate, controllers.getUserPrivate);
+router
+  .route('/')
+  .post(controllers.authUser)
+  .all(invalidMethod);
 
-module.exports = authRouter;
+module.exports = router;

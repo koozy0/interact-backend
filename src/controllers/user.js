@@ -6,13 +6,15 @@ const getOne = async (req, res, next) => {
   const { id } = req.params;
 
   try {
+    // Find User by given id, exclude "password" field
     const user = await User.findById(id).select('-password');
 
-    if (user) {
-      res.json(user);
-    } else {
-      res.status(404).json({ msg: 'User not found' });
+    // Return HTTP 404 error if a matching User is not found
+    if (!user) {
+      return res.status(404).json({ msg: 'User not found' });
     }
+
+    res.json(user);
   } catch (err) {
     next(err);
   }
@@ -21,39 +23,27 @@ const getOne = async (req, res, next) => {
 const createOne = async (req, res, next) => {
   const { username, password, name, email, role } = req.body;
 
-  // Check for existing user
+  // Check for existing User
   const hasUser = await User.findOne({ username });
 
   if (hasUser) {
-    return res.status(400).json({ msg: 'User already exists' });
+    const msg = 'User already exists';
+    return res.status(400).json({ msg });
   }
 
   try {
     // Create new User
-    const newUser = new User({
-      username,
-      password,
-      name,
-      email,
-      role,
-    });
+    const newUser = new User({ username, password, name, email, role });
     const user = await newUser.save();
+    const { id, username, name, email, role, isAdmin } = user;
 
     // Create JWT
-    const token = jwt.sign(
-      { id: user.id, username: user.username, role: user.role },
-      config.authentication.jwtSecret,
-    );
+    const payload = { id, username, isAdmin };
+    const token = jwt.sign(payload, config.authentication.jwtSecret);
 
-    res.status(201).json({
-      token,
-      user: {
-        id: user.id,
-        username: user.username,
-        name: user.name,
-        email: user.email,
-      },
-    });
+    res
+      .status(201)
+      .json({ token, user: { id, username, name, email, role, isAdmin } });
   } catch (err) {
     next(err);
   }

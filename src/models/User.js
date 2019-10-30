@@ -44,7 +44,10 @@ const UserSchema = new Schema(
       default: ['user'],
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+  },
 );
 
 UserSchema.pre('save', async function(next) {
@@ -66,15 +69,15 @@ UserSchema.methods.isValidPassword = async function(password) {
   return isValidPassword;
 };
 
-UserSchema.methods.isAdmin = function() {
-  return this.role.includes('administrator');
-};
-
 UserSchema.methods.getAuthToken = function() {
   return jwt.sign(
     { _id: this._id, isAdmin: this.isAdmin() },
     config.authentication.jwtSecret,
   );
 };
+
+UserSchema.virtual('isAdmin').get(function() {
+  return this.roles.includes('administrator');
+});
 
 module.exports = User = mongoose.model('User', UserSchema);

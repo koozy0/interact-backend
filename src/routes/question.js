@@ -1,13 +1,18 @@
 const express = require('express');
 const controllers = require('../controllers/question');
+const invalidMethod = require('../controllers/invalid-method');
 
-const questionRouter = express.Router({ mergeParams: true });
+const router = express.Router({ mergeParams: true });
 
-questionRouter.route('/').post(controllers.createOne);
+router
+  .route('/events/:event/questions')
+  .post(controllers.createOne)
+  .all(invalidMethod);
 
-questionRouter
-  .route('/:questionId')
+router
+  .route('/questions/:id')
   .put(controllers.updateOne)
-  .delete(controllers.deleteOne);
+  .delete(controllers.deleteOne)
+  .all(invalidMethod);
 
-module.exports = questionRouter;
+module.exports = router;

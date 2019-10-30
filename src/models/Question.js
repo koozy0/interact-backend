@@ -3,13 +3,20 @@ const Schema = mongoose.Schema;
 
 const QuestionSchema = new Schema(
   {
+    event: {
+      type: Schema.Types.ObjectId,
+      ref: 'Event',
+    },
+
     author: {
       type: String,
+      maxlength: 50,
       default: 'Anonymous',
     },
 
     question: {
       type: String,
+      maxlength: 255,
       required: true,
     },
 
@@ -24,8 +31,21 @@ const QuestionSchema = new Schema(
       min: 0,
       default: 0,
     },
+
+    popularity: {
+      type: Number,
+      default: 0,
+    },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+  },
 );
+
+QuestionSchema.pre('save', function(next) {
+  this.popularity = this.upvotes - this.downvotes;
+  next();
+});
 
 module.exports = Question = mongoose.model('Question', QuestionSchema);
