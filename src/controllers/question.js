@@ -13,10 +13,7 @@ const getAll = async (req, res, next) => {
   try {
     // Find all Question(s) where event matches the given event id
     // Sort by the specified field in descending order (default: "popularity")
-    const questions = await Question.find({ event }).sort({
-      field: sort,
-      test: -1,
-    });
+    const questions = await Question.find({ event }).sort({ [sort]: -1 });
 
     res.status(200).json(questions);
   } catch (err) {}
