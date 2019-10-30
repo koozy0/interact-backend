@@ -1,33 +1,41 @@
 const winston = require('winston');
 const config = require('../config');
 
-const logger = winston.createLogger({
-  format: winston.format.combine(
-    winston.format.label({ label: 'server' }),
-    winston.format.errors({ stack: true }),
-    winston.format.timestamp(),
-    winston.format.splat(),
-    winston.format.json(),
-  ),
-  transports: [
-    new winston.transports.Console({
-      ...config.winston,
-      json: false,
-      colorize: true,
-      format: winston.format.prettyPrint(),
-    }),
-    new winston.transports.File({
-      ...config.winston,
-      json: true,
-      colorize: false,
-      maxsize: 5242880, //5MB
-      maxFiles: 5,
-      filename: `./logs/combined_${new Date()
-        .toJSON()
-        .slice(0, 10)
-        .replace(/-/g, '')}.log`,
-    }),
-  ],
+const { format, transports, createLogger } = winston;
+
+const getDate = () =>
+  new Date()
+    .toJSON()
+    .slice(0, 10)
+    .replace(/-/g, '');
+
+const formatter = format.combine(
+  format.label({ label: 'server' }),
+  format.errors({ stack: true }),
+  format.timestamp(),
+  format.splat(),
+  format.json(),
+);
+
+const consoleTransport = new transports.Console({
+  ...config.winston,
+  json: false,
+  colorize: true,
+  format: format.prettyPrint(),
+});
+
+const fileTransport = new transports.File({
+  ...config.winston,
+  json: true,
+  colorize: false,
+  maxsize: 5242880, //5MB
+  maxFiles: 5,
+  filename: `./logs/combined_${getDate()}.log`,
+});
+
+const logger = createLogger({
+  format: formatter,
+  transports: [consoleTransport, fileTransport],
 });
 
 logger.stream = {
