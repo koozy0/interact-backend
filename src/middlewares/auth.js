@@ -4,29 +4,32 @@ const config = require('../config');
 const authenticate = (req, res, next) => {
   const token = req.header('x-auth-token');
 
-  // Check for token
+  // Return HTTP 401 error if a token is not found
   if (!token) {
-    res.status(401).json({ msg: 'Missing credentials' });
+    const msg = 'Missing credentials';
+    res.status(401).json({ msg });
   }
+
   try {
     // Verify token
     const decoded = jwt.verify(token, config.authentication.jwtSecret);
     req.user = decoded;
+
     next();
   } catch (err) {
-    res.status(401).json({ msg: 'Invalid credentials' });
+    const msg = 'Invalid credentials';
+    res.status(401).json({ msg });
   }
 };
 
 const isAdmin = (req, res, next) => {
   const user = req.user;
 
-  if (user.role.includes('administrator')) {
+  if (user.isAdmin) {
     next();
   } else {
-    res.status(403).json({
-      msg: 'Administrator rights are required to perform this action',
-    });
+    const msg = 'Administrator rights are required to perform this action';
+    res.status(403).json({ msg });
   }
 };
 
