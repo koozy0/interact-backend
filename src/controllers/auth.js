@@ -11,7 +11,9 @@ const authUser = async (req, res, next) => {
 
     // Return HTTP 404 error if a matching User is not found
     if (!user) {
-      return res.status(404).json({ msg: 'User does not exist' });
+      const message = 'User does not exist';
+      const status = 404;
+      return res.status(status).json({ message, status });
     }
 
     // Validate password
@@ -19,7 +21,9 @@ const authUser = async (req, res, next) => {
 
     // Return HTTP 401 error if the given password is invalid
     if (!isValidPassword) {
-      return res.status(401).json({ msg: 'Invalid credentials' });
+      const message = 'Invalid credentials';
+      const status = 401;
+      return res.status(401).json({ message, status });
     }
 
     // Create JWT
@@ -48,4 +52,23 @@ const authUser = async (req, res, next) => {
   }
 };
 
-module.exports = { authUser };
+const loadUser = async (req, res, next) => {
+  const id = req.user.id;
+
+  try {
+    const user = await User.findById(id).select('-password');
+
+    // Return HTTP 404 error if a matching User is not found
+    if (!user) {
+      const message = 'User not found';
+      const status = 404;
+      return res.status(404).json({ message, status });
+    }
+
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = { authUser, loadUser };

@@ -36,9 +36,9 @@ const getOne = async (req, res, next) => {
 
     // Return HTTP 404 error if a matching Event is not found
     if (!event) {
-      return res
-        .status(404)
-        .json({ msg: `Event with code: "${code}" was not found` });
+      const message = `Event with code: "${code}" was not found`;
+      const status = 404;
+      return res.status(status).json({ message, status });
     }
 
     res.status(200).json(event);

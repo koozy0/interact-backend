@@ -32,6 +32,11 @@ const QuestionSchema = new Schema(
       default: 0,
     },
 
+    highlighted: {
+      type: Boolean,
+      default: false,
+    },
+
     popularity: {
       type: Number,
       default: 0,

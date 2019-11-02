@@ -6,8 +6,10 @@ const getAll = async (req, res, next) => {
 
   // Simple validation for "sort" field
   if (!['popularity', 'createdAt'].includes(sort)) {
-    const msg = 'Question(s) can only be sorted by "popularity" or "createdAt"';
-    res.status(400).json({ msg });
+    const message =
+      'Question(s) can only be sorted by "popularity" or "createdAt"';
+    const status = 400;
+    res.status(status).json({ message, status });
   }
 
   try {

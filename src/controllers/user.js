@@ -11,7 +11,9 @@ const getOne = async (req, res, next) => {
 
     // Return HTTP 404 error if a matching User is not found
     if (!user) {
-      return res.status(404).json({ msg: 'User not found' });
+      const message = 'User not found';
+      const status = 404;
+      return res.status(404).json({ message, status });
     }
 
     res.json(user);
@@ -24,19 +26,22 @@ const createOne = async (req, res, next) => {
   const { username, password, name, email, role, secret } = req.body;
 
   if (!secret) {
-    const msg = 'Secret key is required';
-    res.status(400).json({ msg });
+    const message = 'Secret key is required';
+    const status = 400;
+    res.status(status).json({ message, status });
   } else if (secret !== config.user.adminSecret) {
-    const msg = 'Invalid secret key';
-    res.status(400).json({ msg });
+    const message = 'Invalid secret key';
+    const status = 400;
+    res.status(status).json({ message, status });
   }
 
   // Check for existing User
   const hasUser = await User.findOne({ username });
 
   if (hasUser) {
-    const msg = 'User already exists';
-    return res.status(400).json({ msg });
+    const message = 'User already exists';
+    const status = 400;
+    return res.status(status).json({ message, status });
   }
 
   try {

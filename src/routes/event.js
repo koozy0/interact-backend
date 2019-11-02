@@ -14,7 +14,7 @@ router
 router.route('/search').get(controllers.search);
 
 router
-  .route('/:code')
+  .route('/:eventCode')
   .get(controllers.getOne)
   .put(auth.authenticate, auth.isAdmin, controllers.updateOne)
   .delete(auth.authenticate, auth.isAdmin, controllers.deleteOne)

@@ -6,8 +6,9 @@ const authenticate = (req, res, next) => {
 
   // Return HTTP 401 error if a token is not found
   if (!token) {
-    const msg = 'Missing credentials';
-    res.status(401).json({ msg });
+    const message = 'Missing credentials';
+    const status = 401;
+    res.status(status).json({ message, status });
   }
 
   try {
@@ -17,8 +18,9 @@ const authenticate = (req, res, next) => {
 
     next();
   } catch (err) {
-    const msg = 'Invalid credentials';
-    res.status(401).json({ msg });
+    const message = 'Invalid credentials';
+    const status = 401;
+    res.status(status).json({ message, status });
   }
 };
 
@@ -28,8 +30,9 @@ const isAdmin = (req, res, next) => {
   if (user.isAdmin) {
     next();
   } else {
-    const msg = 'Administrator rights are required to perform this action';
-    res.status(403).json({ msg });
+    const message = 'Administrator rights are required to perform this action';
+    const status = 403;
+    res.status(status).json({ message, status });
   }
 };
 

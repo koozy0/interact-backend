@@ -17,6 +17,10 @@ router.use('/users', userRouter);
 router.use('/events', eventRouter);
 router.use(questionRouter);
 
-router.route('*').get((req, res) => res.sendStatus(404));
+router
+  .route('*')
+  .get((req, res) =>
+    res.status(404).json({ message: 'Not Found', status: 404 }),
+  );
 
 module.exports = router;

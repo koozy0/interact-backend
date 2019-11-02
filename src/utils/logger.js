@@ -30,7 +30,7 @@ const fileTransport = new transports.File({
   colorize: false,
   maxsize: 5242880, //5MB
   maxFiles: 5,
-  filename: `./logs/combined_${getDate()}.log`,
+  filename: `./logs/${getDate()}_combined.log`,
 });
 
 const logger = createLogger({

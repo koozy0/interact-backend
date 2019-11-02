@@ -34,13 +34,6 @@ const EventSchema = new Schema(
       type: Date,
       required: true,
     },
-
-    highlights: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Question',
-      },
-    ],
   },
   {
     timestamps: true,

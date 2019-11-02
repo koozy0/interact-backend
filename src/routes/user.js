@@ -10,7 +10,7 @@ userRouter
   .all(invalidMethod);
 
 userRouter
-  .route('/:id')
+  .route('/:userId')
   .put(controllers.updateOne)
   .delete(controllers.deleteOne)
   .all(invalidMethod);
