@@ -2,26 +2,6 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const config = require('../config');
 
-const getOne = async (req, res, next) => {
-  const { id } = req.params;
-
-  try {
-    // Find User by given id, exclude "password" field
-    const user = await User.findById(id).select('-password');
-
-    // Return HTTP 404 error if a matching User is not found
-    if (!user) {
-      const message = 'User not found';
-      const status = 404;
-      return res.status(404).json({ message, status });
-    }
-
-    res.json(user);
-  } catch (err) {
-    next(err);
-  }
-};
-
 const createOne = async (req, res, next) => {
   const { username, password, name, email, role, secret } = req.body;
 
@@ -75,9 +55,29 @@ const createOne = async (req, res, next) => {
   }
 };
 
-const updateOne = async (req, res, next) => {};
-
 const deleteOne = async (req, res, next) => {};
+
+const getOne = async (req, res, next) => {
+  const { username } = req.params;
+
+  try {
+    // Find User by given id, exclude "password" field
+    const user = await User.findOne({ username }).select('-password');
+
+    // Return HTTP 404 error if a matching User is not found
+    if (!user) {
+      const message = 'User not found';
+      const status = 404;
+      return res.status(404).json({ message, status });
+    }
+
+    res.json(user);
+  } catch (err) {
+    next(err);
+  }
+};
+
+const updateOne = async (req, res, next) => {};
 
 module.exports = {
   getOne,

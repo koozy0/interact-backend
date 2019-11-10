@@ -7,14 +7,12 @@ const router = express.Router();
 
 router
   .route('/')
-  .get(auth.authenticate, auth.isAdmin, controllers.getAll)
+  .get(controllers.getAll)
   .post(auth.authenticate, auth.isAdmin, controllers.createOne)
   .all(invalidMethod);
 
-router.route('/search').get(controllers.search);
-
 router
-  .route('/:eventCode')
+  .route('/:eventcode')
   .get(controllers.getOne)
   .put(auth.authenticate, auth.isAdmin, controllers.updateOne)
   .delete(auth.authenticate, auth.isAdmin, controllers.deleteOne)

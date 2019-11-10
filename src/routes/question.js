@@ -5,13 +5,13 @@ const invalidMethod = require('../controllers/invalid-method');
 const router = express.Router({ mergeParams: true });
 
 router
-  .route('/events/:eventId/questions')
+  .route('/events/:eventcode/questions')
   .get(controllers.getAll)
   .post(controllers.createOne)
   .all(invalidMethod);
 
 router
-  .route('/questions/:questionId')
+  .route('/questions/:id')
   .put(controllers.updateOne)
   .delete(controllers.deleteOne)
   .all(invalidMethod);
