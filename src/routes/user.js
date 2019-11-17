@@ -11,6 +11,7 @@ userRouter
 
 userRouter
   .route('/:username')
+  .get(controllers.getOne)
   .put(controllers.updateOne)
   .delete(controllers.deleteOne)
   .all(invalidMethod);
