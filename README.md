@@ -1,6 +1,8 @@
-This project was created with [Node.js](https://nodejs.org/en/) using [Express](https://expressjs.com/).
+This project was created with [Node.js](https://nodejs.org/en/) using [Express](https://expressjs.com/), [mongoDB](https://www.mongodb.com/download-center/community) and [socket.io](https://www.npmjs.com/package/socket.io).
 
 ## Required Configuration
+
+Make sure you have [Node.js](https://nodejs.org/en/) and [mongoDB](https://www.mongodb.com/download-center/community) installed.
 
 Create a `.env` file using `.env.example` for reference. Fill in the values as required.
 

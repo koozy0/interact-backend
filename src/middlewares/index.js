@@ -6,6 +6,7 @@ const logger = require('../utils/logger');
 const morgan = require('morgan');
 
 // cross origin resource sharing
+// TODO: configure a whitelist for cors instead of allowing all origins
 const corsMiddleware = cors();
 
 // compress response bodies
