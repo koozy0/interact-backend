@@ -34,7 +34,12 @@ const createOne = async (req, res, next) => {
 
   try {
     const created = await newQuestion.save();
-
+    // emit 'create_question' event to the event room
+    res.app
+      .get('io')
+      .to(event)
+      .emit('create_question', created);
+    // respond to http request
     res.status(201).json(created);
   } catch (err) {
     next(err);

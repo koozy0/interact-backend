@@ -1,28 +1,17 @@
 const logger = require('./utils/logger');
+const socketIO = require('socket.io');
 
-// Question Model
-const Question = require('./models/Question');
+const init = server => {
+  const io = socketIO(server);
 
-const sockets = {};
-
-sockets.init = server => {
-  const io = require('socket.io')(server);
-
-  io.on('connection', async socket => {
+  io.on('connection', socket => {
     const id = socket.id;
 
     logger.info(`Client connected: ${id}`, { label: 'socket.io' });
 
-    const questions = await Question.find();
-
-    socket.emit(
-      'message',
-      { msg: `client ${id} has connected`, questions },
-      { label: 'socket.io' },
-    );
-
-    socket.on('client-message', message => {
-      socket.broadcast.emit('message', { clientId: id, message });
+    socket.on('join', room => {
+      // Join the appropriate room
+      socket.join(room);
     });
 
     socket.on('disconnect', () => {
@@ -33,4 +22,4 @@ sockets.init = server => {
   return io;
 };
 
-module.exports = sockets;
+module.exports = { init };
