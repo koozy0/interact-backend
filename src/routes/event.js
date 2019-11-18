@@ -12,8 +12,13 @@ router
   .all(invalidMethod);
 
 router
-  .route('/:eventcode')
-  .get(controllers.getOne)
+  .route('/find')
+  .get(controllers.getOneByCode)
+  .all(invalidMethod);
+
+router
+  .route('/:id')
+  .get(controllers.getOneById)
   .put(auth.authenticate, auth.isAdmin, controllers.updateOne)
   .delete(auth.authenticate, auth.isAdmin, controllers.deleteOne)
   .all(invalidMethod);

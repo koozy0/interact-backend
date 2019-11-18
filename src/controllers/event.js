@@ -38,8 +38,8 @@ const getAll = async (req, res, next) => {
   }
 };
 
-const getOne = async (req, res, next) => {
-  const { eventcode: code } = req.params;
+const getOneByCode = async (req, res, next) => {
+  const { eventcode: code } = req.query;
 
   try {
     // Find an Event where Event.code matches the given event code
@@ -62,12 +62,31 @@ const getOne = async (req, res, next) => {
   }
 };
 
+const getOneById = async (req, res, next) => {
+  try {
+    // Find an Event where Event.code matches the given event code
+    const event = await Event.findById(req.params.id);
+
+    // Return HTTP 404 error if a matching Event is not found
+    if (!event) {
+      const message = `Event with id: "${req.params.id}" was not found`;
+      const status = 404;
+      return res.status(status).json({ message, status });
+    }
+
+    res.status(200).json(event);
+  } catch (err) {
+    next(err);
+  }
+};
+
 const updateOne = async (req, res, next) => {};
 
 module.exports = {
   createOne,
   deleteOne,
   getAll,
-  getOne,
+  getOneByCode,
+  getOneById,
   updateOne,
 };
