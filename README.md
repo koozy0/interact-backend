@@ -32,13 +32,14 @@ This project was created with [Node.js](https://nodejs.org/en/) using [Express](
 
 ### Events
 
-| Method | Route              | Description                            |
-| :----- | :----------------- | :------------------------------------- |
-| GET    | /events            | Fetch events                           |
-| GET    | /events/:eventcode | Fetch events with a matching eventcode |
-| POST   | /events            | Create new event                       |
-| PUT    | /events/:eventcode | Update event (pending)                 |
-| DELETE | /events/:eventcode | Delete event (pending)                 |
+| Method | Route        | Description                             |
+| :----- | :----------- | :-------------------------------------- |
+| GET    | /events      | Fetch events                            |
+| GET    | /events/find | Fetch events with a matching event code |
+| GET    | /events/:id  | Fetch events with a matching id         |
+| POST   | /events      | Create new event                        |
+| PUT    | /events/:id  | Update event (pending)                  |
+| DELETE | /events/:id  | Delete event (pending)                  |
 
 ### Questions
 
