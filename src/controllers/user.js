@@ -8,11 +8,11 @@ const createOne = async (req, res, next) => {
   if (!secret) {
     const message = 'Secret key is required';
     const status = 400;
-    res.status(status).json({ message, status });
+    return res.status(status).json({ message, status });
   } else if (secret !== config.user.adminSecret) {
     const message = 'Invalid secret key';
     const status = 400;
-    res.status(status).json({ message, status });
+    return res.status(status).json({ message, status });
   }
 
   // Check for existing User
