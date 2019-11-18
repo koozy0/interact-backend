@@ -64,3 +64,13 @@ Runs the server in the development mode.<br />
 Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
 
 The server will reload if you make edits.<br />
+
+## Todos
+
+- Add functionality for the `update` and `delete` controllers for the different resources
+
+- Add functionality to emit events for `update_question` and `delete_question` to the respective routes
+
+- Add functionality to log events emitted by `socket.io`
+
+- Add a Dockerfile and build Docker image
