@@ -1,10 +1,16 @@
 This project was created with [Node.js](https://nodejs.org/en/) using [Express](https://expressjs.com/), [mongoDB](https://www.mongodb.com/download-center/community) and [socket.io](https://www.npmjs.com/package/socket.io).
 
-## Required Configuration
+## Getting Started
 
-Make sure you have [Node.js](https://nodejs.org/en/) and [mongoDB](https://www.mongodb.com/download-center/community) installed.
+- Make sure you have [Node.js](https://nodejs.org/en/) and [mongoDB](https://www.mongodb.com/download-center/community) installed.
 
-Create a `.env` file using `.env.example` for reference. Fill in the values as required.
+- Create a `.env` file using `.env.example` for reference. Fill in the values as required.
+
+- Clone the project: `git clone <project-repository-url>`
+
+- Install dependencies: `npm i`
+
+- Start the development server: `npm run server`
 
 ## Routes
 
@@ -52,7 +58,7 @@ In the project directory, you can run:
 Runs the server in the development mode.<br />
 Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
 
-### `npm server`
+### `npm run server`
 
 Runs the server in the development mode.<br />
 Open [http://localhost:5000](http://localhost:5000) to view it in the browser.
